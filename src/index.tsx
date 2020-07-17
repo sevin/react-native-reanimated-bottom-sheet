@@ -305,7 +305,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       React.createRef(),
     ],
     callbackThreshold: 0.01,
-    deviceHeight: screenHeight
+    deviceHeight: screenHeight,
+    containerStyle: {},
   }
 
   private decayClock = new Clock()
@@ -737,7 +738,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }
 
   render() {
-    const { borderRadius } = this.props
+    const {
+      borderRadius,
+      containerStyle,
+    } = this.props
     return (
       <React.Fragment>
         <Animated.View
@@ -762,6 +766,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                 translateY: sub(this.height, this.state.initSnap) as any,
               },
             ],
+            ...containerStyle
           }}
         >
           <PanGestureHandler
