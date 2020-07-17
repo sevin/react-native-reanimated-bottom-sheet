@@ -110,6 +110,7 @@ type Props = {
   onCloseEnd?: () => void
   callbackThreshold?: number
   borderRadius?: number
+  deviceHeight?: number
 }
 
 type State = {
@@ -304,6 +305,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       React.createRef(),
     ],
     callbackThreshold: 0.01,
+    deviceHeight: screenHeight
   }
 
   private decayClock = new Clock()
@@ -673,14 +675,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }: LayoutChangeEvent) =>
     this.state.heightOfContent.setValue(height - this.state.initSnap)
 
-  static renumber = (str: string) =>
-    (Number(str.split('%')[0]) * screenHeight) / 100
+  static renumber = (str: string, deviceHeight: number) =>
+    (Number(str.split('%')[0]) * deviceHeight) / 100
 
   static getDerivedStateFromProps(
     props: Props,
     state: State | undefined
   ): State {
     let snapPoints
+    const { deviceHeight } = props;
     const sortedPropsSnapPoints: Array<{
       val: number
       ind: number
@@ -696,7 +699,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           if (typeof s === 'number') {
             return { val: s, ind: i }
           } else if (typeof s === 'string') {
-            return { val: BottomSheetBehavior.renumber(s), ind: i }
+            return { val: BottomSheetBehavior.renumber(s, deviceHeight), ind: i }
           }
 
           throw new Error(`Invalid type for value ${s}: ${typeof s}`)
