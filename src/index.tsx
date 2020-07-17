@@ -110,7 +110,8 @@ type Props = {
   onCloseEnd?: () => void
   callbackThreshold?: number
   borderRadius?: number
-  deviceHeight?: number
+  deviceHeight: number
+  containerStyle?: Object
 }
 
 type State = {
