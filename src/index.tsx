@@ -111,7 +111,7 @@ type Props = {
   callbackThreshold?: number
   borderRadius?: number
   deviceHeight: number
-  containerStyle?: Object
+  containerStyle?: object
 }
 
 type State = {
