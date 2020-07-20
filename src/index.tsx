@@ -113,9 +113,12 @@ type Props = {
   onOpenEnd?: () => void
   onCloseStart?: () => void
   onCloseEnd?: () => void
+  onLayoutHeightChange?: () => void
   callbackThreshold?: number
   borderRadius?: number
   deviceHeight: number
+  pointerEvents?: string
+  containerStyle?: object
 }
 
 type State = {
@@ -311,7 +314,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       React.createRef(),
     ],
     callbackThreshold: 0.01,
-    deviceHeight: screenHeight
+    deviceHeight: screenHeight,
+    pointerEvents: 'auto',
+    containerStyle: {},
   }
 
   private decayClock = new Clock()
@@ -796,7 +801,11 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }
 
   render() {
-    const { borderRadius } = this.props
+    const {
+      borderRadius,
+      containerStyle,
+      pointerEvents,
+    } = this.props
     return (
       <React.Fragment>
         <Animated.View
@@ -821,7 +830,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                 translateY: sub(this.height, this.state.initSnap) as any,
               },
             ],
+            ...containerStyle
           }}
+          pointerEvents={pointerEvents}
         >
           <PanGestureHandler
             enabled={
@@ -847,7 +858,6 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             style={
               this.props.enabledInnerScrolling && {
                 height: this.state.initSnap - this.state.heightOfHeader,
-                overflow: 'hidden',
                 borderTopLeftRadius: borderRadius,
                 borderTopRightRadius: borderRadius,
               }
@@ -896,6 +906,18 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                 )
               )}
             />
+            {this.props.onLayoutHeightChange &&
+              <Animated.Code
+                exec={onChange(
+                  this.height,
+                  [
+                    call([], () => {
+                      if (this.props.onLayoutHeightChange) this.props.onLayoutHeightChange()
+                    })
+                  ]
+                )}
+              />
+            }
             {this.props.callbackNode && (
               <Animated.Code
                 exec={onChange(
