@@ -117,7 +117,7 @@ type Props = {
   callbackThreshold?: number
   borderRadius?: number
   deviceHeight: number
-  pointerEvents?: string
+  pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto'
   containerStyle?: object
 }
 
